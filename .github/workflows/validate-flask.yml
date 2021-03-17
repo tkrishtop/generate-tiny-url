@@ -1,0 +1,47 @@
+name: Pipeline - Server - Flask Backend Validation
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # check if backend boots fine
+      - name: Run flask container - backend
+        run: |
+          docker-compose -f docker-compose.yml up -d backend
+
+      - name: Print flask status
+        run: |
+          docker ps --filter "name=backend"
+
+      - name: List images
+        run: |
+          docker image ls
+
+      - name: Fail if flask container is not running
+        run: |
+          if [[ x`docker ps --filter "name=backend" | grep Up` = x ]]; then exit 1; fi
+
+      # run test suite
+      - name: Print test results
+        run: |
+          docker exec backend pytest -v
+
+      - name: Fail if tests are not 100%
+        run: |
+          if [[ x`docker exec backend pytest -v` =~ "FAILED" ]]; then exit 1; fi
+
+      # slack notification
+      - name: Send notification to slack
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_MESSAGE: Backend tests [generate-tiny-url]
+          SLACK_TITLE: Good news - backend boots OK, tests are 100%
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
