@@ -2,7 +2,7 @@ FROM python:3.8
 
 MAINTAINER Tatiana KRISHTOP
 
-LABEL com.github.tkrishtop="0.0.1"
+LABEL com.github.version="0.0.1"
 
 ENV APP_ROOT /tmp/backend
 

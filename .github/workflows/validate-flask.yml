@@ -37,11 +37,20 @@ jobs:
         run: |
           if [[ x`docker exec backend pytest -v` =~ "FAILED" ]]; then exit 1; fi
 
+      # heroku login/logout
+      - name: Heroku login
+        run: |
+          echo "${{ secrets.HEROKU_API_KEY }}" | docker login -u ${{ secrets.HEROKU_USER }} ${{ secrets.HEROKU_REGISTRY }} --password-stdin
+
+      - name: Heroku logout
+        run: |
+          docker logout ${{ secrets.HEROKU_REGISTRY }}
+
       # slack notification
       - name: Send notification to slack
         uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_MESSAGE: Backend tests [generate-tiny-url]
-          SLACK_TITLE: Good news - backend boots OK, tests are 100%
+          SLACK_TITLE: Backend tests [generate-tiny-url] for the commit - ${{ github.event.head_commit.message }}
+          SLACK_MESSAGE: Good news - backend boots OK, tests are 100%
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
