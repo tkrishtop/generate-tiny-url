@@ -49,9 +49,13 @@ jobs:
         run: |
           echo "${{ secrets.HEROKU_API_KEY }}" | docker login -u ${{ secrets.HEROKU_USER }} ${{ env.HEROKU_REGISTRY }} --password-stdin
 
-      - name: Heroku - push backend image
-        run: |
-          docker image push ${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/web
+#      - name: Heroku - push backend image
+#        run: |
+#          docker image push ${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/web
+#
+#      - name: Heroku - deploy the backend
+#        run: |
+#          HEROKU_API_KEY=${{ secrets.HEROKU_API_KEY }} heroku container:release web -a ${{ env.HEROKU_APP_NAME }}
 
       - name: Heroku logout
         run: |
