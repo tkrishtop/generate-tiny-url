@@ -20,6 +20,10 @@ jobs:
         run: |
           docker ps --filter "name=backend"
 
+      - name: Tag image
+        run: |
+          docker image tag generate-tiny-url_backend ${{ secrets.HEROKU_REGISTRY }}/${{ secrets.HEROKU_APP_NAME }}/web
+
       - name: List images
         run: |
           docker image ls
