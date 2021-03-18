@@ -7,6 +7,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
+    env:
+      HEROKU_REGISTRY: registry.heroku.com
+      HEROKU_APP_NAME: generate-tiny-url
 
     steps:
       - uses: actions/checkout@v2
@@ -22,7 +25,7 @@ jobs:
 
       - name: Tag image
         run: |
-          docker image tag generate-tiny-url_backend ${{ secrets.HEROKU_REGISTRY }}/${{ secrets.HEROKU_APP_NAME }}/web
+          docker image tag generate-tiny-url_backend ${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/web
 
       - name: List images
         run: |
@@ -44,11 +47,11 @@ jobs:
       # heroku login/logout
       - name: Heroku login
         run: |
-          echo "${{ secrets.HEROKU_API_KEY }}" | docker login -u ${{ secrets.HEROKU_USER }} ${{ secrets.HEROKU_REGISTRY }} --password-stdin
+          echo "${{ secrets.HEROKU_API_KEY }}" | docker login -u ${{ secrets.HEROKU_USER }} ${{ env.HEROKU_REGISTRY }} --password-stdin
 
       - name: Heroku logout
         run: |
-          docker logout ${{ secrets.HEROKU_REGISTRY }}
+          docker logout ${{ env.HEROKU_REGISTRY }}
 
       # slack notification
       - name: Send notification to slack
