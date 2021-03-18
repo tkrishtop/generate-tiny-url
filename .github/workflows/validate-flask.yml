@@ -44,10 +44,14 @@ jobs:
         run: |
           if [[ x`docker exec backend pytest -v` =~ "FAILED" ]]; then exit 1; fi
 
-      # heroku login/logout
+      # push backend image to heroku
       - name: Heroku login
         run: |
           echo "${{ secrets.HEROKU_API_KEY }}" | docker login -u ${{ secrets.HEROKU_USER }} ${{ env.HEROKU_REGISTRY }} --password-stdin
+
+      - name: Heroku - push backend image
+        run: |
+          docker image push ${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/web
 
       - name: Heroku logout
         run: |
