@@ -15,25 +15,25 @@ jobs:
       - uses: actions/checkout@v2
 
       # check if backend boots fine
-      - name: Run flask container - backend
+      - name: Build backend image
         run: |
-          docker-compose -f docker-compose.yml up -d backend
-
-      - name: Print flask status
-        run: |
-          docker ps --filter "name=backend"
-
-      - name: Tag image
-        run: |
-          docker image tag generate-tiny-url_backend ${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/web
+          docker build -t ${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/web -f ./backend/Dockerfile ./backend
 
       - name: List images
         run: |
           docker image ls
 
+      - name: Run flask container - backend
+        run: |
+          docker run --name backend -d -p 5555:5555 ${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/web
+
+      - name: Print flask status
+        run: |
+          docker ps --filter "ancestor=${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/web"
+
       - name: Fail if flask container is not running
         run: |
-          if [[ x`docker ps --filter "name=backend" | grep Up` = x ]]; then exit 1; fi
+          if [[ x`docker ps --filter "ancestor=${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/web" | grep Up` = x ]]; then exit 1; fi
 
       # run test suite
       - name: Print test results
@@ -45,17 +45,17 @@ jobs:
           if [[ x`docker exec backend pytest -v` =~ "FAILED" ]]; then exit 1; fi
 
       # push backend image to heroku
-      - name: Heroku login
+      - name: Heroku docker registry - login
         run: |
           echo "${{ secrets.HEROKU_API_KEY }}" | docker login -u ${{ secrets.HEROKU_USER }} ${{ env.HEROKU_REGISTRY }} --password-stdin
 
-#      - name: Heroku - push backend image
-#        run: |
-#          docker image push ${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/web
-#
-#      - name: Heroku - deploy the backend
-#        run: |
-#          HEROKU_API_KEY=${{ secrets.HEROKU_API_KEY }} heroku container:release web -a ${{ env.HEROKU_APP_NAME }}
+      - name: Heroku docker registry - push backend image
+        run: |
+          docker image push ${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/web
+
+      - name: Heroku - deploy the backend
+        run: |
+          HEROKU_API_KEY=${{ secrets.HEROKU_API_KEY }} heroku container:release web -a ${{ env.HEROKU_APP_NAME }}
 
       - name: Heroku logout
         run: |

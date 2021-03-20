@@ -1,11 +1,12 @@
 from flask import Flask, jsonify
 import logging
+import os
 
 
 app = Flask(__name__)
 
 HOST = "0.0.0.0"
-PORT_FLASK = 5555
+PORT_FLASK = os.getenv('PORT', 5555)
 
 # ------------logging---------------------------------------------------------------
 logging.basicConfig(level=logging.INFO)
@@ -29,4 +30,4 @@ def home():
 
 
 if __name__ == '__main__':
-    app.run(host=HOST, port=PORT_FLASK, debug=True)
+    app.run(host=HOST, port=PORT_FLASK, debug=False)

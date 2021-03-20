@@ -4,7 +4,7 @@ MAINTAINER Tatiana KRISHTOP
 
 LABEL com.github.version="0.0.1"
 
-ENV APP_ROOT /tmp/backend
+ENV APP_ROOT /app
 
 # copy everything into tmp folder
 COPY . ${APP_ROOT}
