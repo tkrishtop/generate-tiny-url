@@ -75,7 +75,7 @@ def togo(short_url):
     long_url = codec.decode(short_url)
     logger.info(f"[Redirect2] Going to redirect to: {long_url}")
     if long_url == APP_NAME:
-        flash(f"The short URL {APP_NAME + short_url} does not exist in DB, please try another one", 'error')
+        flash(f"Short URL {APP_NAME + short_url} not found in DB, please try another one", 'error')
     return redirect(long_url)
 
 # ---------------------------------------------------------------------------------
