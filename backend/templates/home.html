@@ -16,7 +16,8 @@
   {% for message in messages %}
   {% if "error" not in message[0]: %}
   <div class="alert alert-info">
-    <strong>Success! Your tiny URL is successfully generated, here it is: </strong> <br> {{ message[1] }}
+    <strong>Success! Your tiny URL is successfully generated, here it is: </strong> <br>
+    <a href="{{ message[1] }}">{{ message[1] }}</a>
   </div>
   {% endif %}
   {% if "error" in message[0]: %}
