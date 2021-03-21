@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, request, get_flashed_messages
+from flask import Flask, render_template, flash, request, get_flashed_messages, redirect
 from wtforms import Form, validators, StringField
 
 import logging
@@ -23,7 +23,6 @@ logger = logging.getLogger('flask-backend')
 
 # ------------------- Codec --------------------------------------------------------
 class Codec:
-
     def __init__(self):
         self.alphabet = string.ascii_letters + '0123456789'
         self.long2short = {}
@@ -38,7 +37,11 @@ class Codec:
         return APP_NAME + self.long2short[long_url]
 
     def decode(self, short_url):
-        return self.short2long[short_url[-6:]]
+        suffix = short_url[-6:]
+        if suffix in self.short2long:
+            return self.short2long[suffix]
+        else:
+            return APP_NAME
 
 # ----------------------------------------------------------------------------------
 
@@ -65,8 +68,17 @@ def home():
 
     return render_template('home.html', form=form)
 
-# ---------------------------------------------------------------------------------
 
+@app.route("/<short_url>", methods=['GET', 'POST'])
+def togo(short_url):
+    logger.info(f"[Redirect] Redirection request: {short_url}")
+    long_url = codec.decode(short_url)
+    logger.info(f"[Redirect2] Going to redirect to: {long_url}")
+    if long_url == APP_NAME:
+        flash(f"The short URL {APP_NAME + short_url} does not exist in DB, please try another one", 'error')
+    return redirect(long_url)
+
+# ---------------------------------------------------------------------------------
 
 if __name__ == '__main__':
     codec = Codec()

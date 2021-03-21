@@ -66,6 +66,6 @@ jobs:
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_TITLE: Backend tests [generate-tiny-url] for the commit - ${{ github.event.head_commit.message }}
-          SLACK_MESSAGE: Good news - backend boots OK, tests are 100%
+          SLACK_MESSAGE: Good news - backend boots fine, tests are 100%, application is deployed on heroku
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
