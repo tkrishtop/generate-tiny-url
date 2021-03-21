@@ -1,10 +1,13 @@
 import run
-import json
 
 
 def test_home():
-    with open("test_responses/home.json") as f:
-        expected = json.load(f)
-    with run.app.app_context():
-        real = run.home().json
-    assert expected == real
+    """
+    Test that home page loads fine
+    :return:
+    """
+    c = run.app.test_client()
+    response = c.get('/')
+    response_data = response.data
+
+    assert b'Generate tiny URL' in response_data

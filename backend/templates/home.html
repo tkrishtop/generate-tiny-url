@@ -1,0 +1,30 @@
+<title>HomePage Form</title>
+<link rel="stylesheet" media="screen" href="static/bootstrap.min.css">
+<link rel="stylesheet" href="static/bootstrap-theme.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<div class="container">
+  <h2>Generate tiny URL</h2>
+  <form action="" method="post" role="form">
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" class="form-control" id="name" name="name" placeholder="Please type here the URL to shorten">
+    </div>
+    <button type="submit" class="btn btn-success">Submit</button>
+  </form>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for message in messages %}
+  {% if "error" not in message[0]: %}
+  <div class="alert alert-info">
+    <strong>Success! Your tiny URL is successfully generated, here it is: </strong> <br> {{ message[1] }}
+  </div>
+  {% endif %}
+  {% if "error" in message[0]: %}
+  <div class="alert alert-warning">
+    <strong>Sorry, there is a problem: </strong> <br> {{ message[1] }}
+  </div>
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+</div>

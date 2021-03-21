@@ -53,7 +53,7 @@ jobs:
         run: |
           docker image push ${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/web
 
-      - name: Heroku - deploy the backend
+      - name: Heroku - deploy the application
         run: |
           HEROKU_API_KEY=${{ secrets.HEROKU_API_KEY }} heroku container:release web -a ${{ env.HEROKU_APP_NAME }}
 
