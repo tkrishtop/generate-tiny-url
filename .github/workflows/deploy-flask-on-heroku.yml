@@ -1,4 +1,4 @@
-name: Pipeline - Server - Flask Backend Validation
+name: Pipeline - Boot - Test - Deploy on Heroku
 
 on:
   push:
