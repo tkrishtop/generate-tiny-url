@@ -1,0 +1,18 @@
+name: Schedule job - Ping app each 9 min
+
+on:
+  schedule:
+    - cron:  '*/9 * * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    env:
+      HEROKU_APP_URL: https://generate-tiny-url.herokuapp.com/
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Ping application
+        run: |
+          curl ${{ env.HEROKU_APP_URL }}
