@@ -1,4 +1,5 @@
-# Moving a simple Flask application to NGINX/uWSGI
+# Migrating a simple Flask application to NGINX/uWSGI
+> ***work in progress***
 
 Welcome here,
 
@@ -6,7 +7,7 @@ In this repository we have a fork of *[generate-tiny-url](https://github.com/tkr
 
 The changes include
 * run the web application with uWSGI
-* serve the web application through NGINX
+* ~~serve the web application through NGINX~~ *not ready yet*
 * adapt the configuration for Heroku
 * general cleanup
 
