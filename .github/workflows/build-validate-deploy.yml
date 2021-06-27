@@ -114,8 +114,9 @@ jobs:
 
     - name: tag images for heroku
       run: |
-        docker tag ${{ env.HEROKU_APP_NAME }}/backend:staging ${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/backend:latest
-        #docker tag ${{ env.HEROKU_APP_NAME }}/nginx:staging ${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/nginx:latest
+        docker tag ${{ env.HEROKU_APP_NAME }}/backend:staging ${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/web:latest
+        #docker tag ${{ env.HEROKU_APP_NAME }}/backend:staging ${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/worker:latest
+        #docker tag ${{ env.HEROKU_APP_NAME }}/nginx:staging ${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/web:latest
         docker image ls
 
     - name: login heroku registry
@@ -123,13 +124,13 @@ jobs:
 
     - name: push images to heroku registry
       run: |
-        docker image push ${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/backend:latest
-        #docker image push ${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/nginx:latest
+        #docker image push ${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/worker:latest
+        docker image push ${{ env.HEROKU_REGISTRY }}/${{ env.HEROKU_APP_NAME }}/web:latest
 
     - name: deploy images to the application
       run: |
-        HEROKU_API_KEY=${{ secrets.HEROKU_API_KEY }} heroku container:release backend -a ${{ env.HEROKU_APP_NAME }}
-        #HEROKU_API_KEY=${{ secrets.HEROKU_API_KEY }} heroku container:release nginx -a ${{ env.HEROKU_APP_NAME }}
+        #HEROKU_API_KEY=${{ secrets.HEROKU_API_KEY }} heroku container:release web worker -a ${{ env.HEROKU_APP_NAME }}
+        HEROKU_API_KEY=${{ secrets.HEROKU_API_KEY }} heroku container:release web -a ${{ env.HEROKU_APP_NAME }}
 
     - name: always logout from heroku registry and never complain
       run: docker logout ${{ env.HEROKU_REGISTRY }}
