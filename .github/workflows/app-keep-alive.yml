@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     env:
       HEROKU_APP_URL: https://nginx-uwsgi-flask.herokuapp.com/
 
