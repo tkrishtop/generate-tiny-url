@@ -1,7 +1,6 @@
 FROM python:3.8
 
-MAINTAINER Tatiana KRISHTOP
-
+LABEL org.opencontainers.image.authors="Tatiana KRISHTOP"
 LABEL com.github.version="0.0.1"
 
 ENV APP_ROOT /app
@@ -16,4 +15,5 @@ WORKDIR ${APP_ROOT}
 RUN pip install -r ${APP_ROOT}/requirements.txt
 
 # run the application
-CMD ["python3", "./run.py"]
+EXPOSE 5555
+CMD ["uwsgi", "--socket", "0.0.0.0:5555", "--protocol=http", "-w", "wsgi:app", "--logto", "/var/log/uwsgi.log"]

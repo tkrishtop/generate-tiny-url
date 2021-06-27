@@ -14,7 +14,7 @@ app.config['SECRET_KEY'] = os.urandom(24)
 
 HOST = "0.0.0.0"
 PORT_FLASK = os.getenv('PORT', 5555)
-APP_NAME = "https://generate-tiny-url.herokuapp.com/"
+APP_NAME = os.getenv('APP_NAME', "https://nginx-uwsgi-flask.herokuapp.com/")
 
 # ------------logging---------------------------------------------------------------
 logging.basicConfig(level=logging.INFO)
@@ -42,6 +42,9 @@ class Codec:
             return self.short2long[suffix]
         else:
             return APP_NAME
+
+# codec needs to be accessible to wsgi caller
+codec = Codec()
 
 # ----------------------------------------------------------------------------------
 
@@ -81,5 +84,4 @@ def togo(short_url):
 # ---------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    codec = Codec()
     app.run(host=HOST, port=PORT_FLASK, debug=False)
