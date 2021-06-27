@@ -1,19 +1,27 @@
-FROM python:3.8
+FROM python:3.8-alpine as builder
+
+RUN    apk add                  \
+        build-base              \
+        linux-headers           \
+        pcre-dev                \
+        python3-dev             \
+    && python -m venv /.venv    \
+    && . /.venv/bin/activate    \
+    && pip install              \
+        flask                   \
+        pytest                  \
+        uwsgi                   \
+        wtforms
+
+FROM python:3.8-alpine
 
 LABEL org.opencontainers.image.authors="Tatiana KRISHTOP"
 LABEL com.github.version="0.0.1"
 
-ENV APP_ROOT /app
+COPY . /app
+COPY --from=builder /.venv /.venv
 
-# copy everything into tmp folder
-COPY . ${APP_ROOT}
+RUN apk add pcre
 
-# go into the destination directory
-WORKDIR ${APP_ROOT}
-
-# install requirements
-RUN pip install -r ${APP_ROOT}/requirements.txt
-
-# run the application
-EXPOSE 5555
-CMD ["uwsgi", "--socket", "0.0.0.0:5555", "--protocol=http", "-w", "wsgi:app", "--logto", "/var/log/uwsgi.log"]
+WORKDIR /app
+ENTRYPOINT ["/app/entrypoint.sh"]

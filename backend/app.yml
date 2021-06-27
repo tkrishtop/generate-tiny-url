@@ -1,0 +1,7 @@
+uwsgi:
+  socket: 0.0.0.0:$(PORT)
+  protocol: http
+  logto: /var/log/uwsgi.log
+  master: true
+  workers: 1
+  module: wsgi:app

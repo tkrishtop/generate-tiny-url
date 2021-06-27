@@ -1,4 +1,0 @@
-flask
-pytest
-uwsgi
-wtforms

@@ -77,7 +77,7 @@ jobs:
       shell: sh {0}
 
     - name: run test
-      run: docker exec backend_staging pytest -v
+      run: docker exec backend_staging /app/pytest.sh
 
     - name: always stop the container and never complain
       run: docker stop backend_staging
