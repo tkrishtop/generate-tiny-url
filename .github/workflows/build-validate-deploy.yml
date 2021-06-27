@@ -100,11 +100,11 @@ jobs:
         name: backend_staging
         path: /tmp
 
-    - name: download nginx artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: nginx_staging
-        path: /tmp
+    #- name: download nginx artifact
+    #  uses: actions/download-artifact@v2
+    #  with:
+    #    name: nginx_staging
+    #    path: /tmp
     
     - name: load backend and nginx images
       run: |
