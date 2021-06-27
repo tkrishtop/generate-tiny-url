@@ -1,18 +1,17 @@
-name: Schedule job - Ping app each 9 min
+name: keep alive
 
 on:
   schedule:
-    - cron:  '*/9 * * * *'
+  - cron:  '*/9 * * * *'
 
 jobs:
   build:
     runs-on: ubuntu-20.04
     env:
-      HEROKU_APP_URL: https://generate-tiny-url.herokuapp.com/
+      HEROKU_APP_URL: https://nginx-uwsgi-flask.herokuapp.com/
 
     steps:
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-      - name: Ping application
-        run: |
-          curl ${{ env.HEROKU_APP_URL }}
+    - name: ping application
+      run: curl ${{ env.HEROKU_APP_URL }}
