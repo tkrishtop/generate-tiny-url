@@ -24,4 +24,3 @@ and fail if tests are not 100%.
 The result looks like this and could be checked live [here, on Heroku](https://generate-tiny-url.herokuapp.com/).
 
 ![app_screenshot](readme/screenshot.png)
-
